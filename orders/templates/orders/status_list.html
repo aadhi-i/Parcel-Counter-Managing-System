@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Recent Orders</title>
+  <meta http-equiv="refresh" content="10">
+  <style>
+    body {
+      font-family: sans-serif;
+      background: #f7f7f7;
+      padding: 2rem;
+    }
+
+    h1 {
+      text-align: center;
+    }
+
+    .order {
+      background: white;
+      max-width: 600px;
+      margin: 1rem auto;
+      padding: 1.5rem;
+      border-radius: 8px;
+      box-shadow: 0 1px 6px rgba(0, 0, 0, 0.08);
+    }
+
+    .status {
+      font-weight: bold;
+      margin-bottom: 1rem;
+    }
+
+    .ready {
+      color: green;
+    }
+
+    .preparing {
+      color: orange;
+    }
+
+    .completed {
+      color: gray;
+    }
+
+    form {
+      margin-top: 0.5rem;
+    }
+
+    button {
+      padding: 8px 16px;
+      background-color: #3498db;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #2980b9;
+    }
+
+    .new-order {
+      text-align: center;
+      margin-top: 2rem;
+    }
+
+    .new-order a {
+      padding: 10px 20px;
+      background: #2ecc71;
+      color: white;
+      text-decoration: none;
+      border-radius: 5px;
+    }
+
+    .new-order a:hover {
+      background: #27ae60;
+    }
+  </style>
+</head>
+<body>
+  <h1>Recent Orders</h1>
+  <div class="new-order">
+    <a href="/order/">➕ Place New Order</a>
+  </div>
+  {% for order in orders %}
+    <div class="order">
+      <p><strong>Order #{{ order.id }}</strong></p>
+
+      {% if order.status == 'ready' %}
+        <p class="status ready">✅ Ready</p>
+        <form method="post" action="{% url 'billing' %}?print=true">
+          {% csrf_token %}
+          <input type="hidden" name="order_id" value="{{ order.id }}">
+          <button type="submit">🖨️ Print Bill</button>
+        </form>
+
+      {% elif order.status == 'completed' %}
+        <p class="status completed">✅ Completed</p>
+        <form method="post" action="{% url 'billing' %}?print=true">
+          {% csrf_token %}
+          <input type="hidden" name="order_id" value="{{ order.id }}">
+          <button type="submit">🖨️ Reprint Bill</button>
+        </form>
+
+      {% else %}
+        <p class="status preparing">⌛ Preparing...</p>
+      {% endif %}
+    </div>
+  {% empty %}
+    <p style="text-align: center;">No recent orders.</p>
+  {% endfor %}
+
+</body>
+</html>

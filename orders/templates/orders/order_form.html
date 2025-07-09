@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #f4f4f4;
+      padding: 2rem;
+    }
+
+    h1 {
+      text-align: center;
+      color: #333;
+    }
+
+    form {
+      max-width: 600px;
+      margin: auto;
+      background: #fff;
+      padding: 1.5rem;
+      border-radius: 8px;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    label {
+      display: block;
+      margin: 1rem 0 0.25rem;
+    }
+
+    input[type="number"] {
+      width: 100%;
+      padding: 8px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+
+    button {
+      margin-top: 1.5rem;
+      width: 100%;
+      padding: 10px;
+      background: #27ae60;
+      border: none;
+      border-radius: 5px;
+      color: white;
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background: #219150;
+    }
+  </style>
+</head>
+
+<body>
+  <h1>Place Order</h1>
+  <form method="post">
+    {% csrf_token %}
+    {% for item in menu %}
+      <label>{{ item.name }} - ₹{{ item.price }}</label>
+      <input type="number" name="{{ item.id }}" min="0" value="0"><br><br>
+    {% endfor %}
+    <button type="submit">Submit Order</button>
+  </form>
+</body>
+</html>

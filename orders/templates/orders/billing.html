@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Billing</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f6f8fa;
+      padding: 2rem;
+    }
+
+    .bill-container {
+      background: white;
+      max-width: 600px;
+      margin: 2rem auto;
+      padding: 1.5rem;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+
+    h2 {
+      text-align: center;
+      color: #2c3e50;
+    }
+
+    ul {
+      list-style: none;
+      padding: 0;
+    }
+
+    li {
+      border-bottom: 1px solid #eee;
+      padding: 8px 0;
+    }
+
+    .total {
+      font-weight: bold;
+      margin-top: 10px;
+    }
+
+    button {
+      display: block;
+      margin: 1rem auto;
+      padding: 10px 20px;
+      font-size: 16px;
+      background-color: #3498db;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #2980b9;
+    }
+  </style>
+
+  <script>
+    function printAndGoBack() {
+      window.print();
+      setTimeout(() => {
+        window.location.href = "/status/";
+      }, 500);
+    }
+  </script>
+</head>
+<body>
+
+  {% if billed_order %}
+    <div class="bill-container" id="bill">
+      <h2>Order #{{ billed_order.id }} - Final Bill</h2>
+      <ul>
+        {% for item in billed_order.items.all %}
+          <li>{{ item.menu_item.name }} × {{ item.quantity }} = ₹{{ item.total_price|floatformat:2 }}</li>
+        {% endfor %}
+      </ul>
+      <p class="total">Total: ₹{{ bill|floatformat:2 }}</p>
+    </div>
+
+    <button onclick="printAndGoBack()">🖨️ Print</button>
+  {% else %}
+    <p style="text-align:center;">No bill selected.</p>
+  {% endif %}
+
+</body>
+</html>

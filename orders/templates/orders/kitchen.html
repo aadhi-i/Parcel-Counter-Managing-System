@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <style>
+    body {
+      font-family: sans-serif;
+      background: #f8f8f8;
+      padding: 2rem;
+    }
+
+    h1 {
+      text-align: center;
+      color: #333;
+    }
+
+    .order-card {
+      background: white;
+      margin: 1rem auto;
+      padding: 1rem;
+      max-width: 600px;
+      border-radius: 6px;
+      box-shadow: 0 1px 5px rgba(0,0,0,0.1);
+    }
+
+    ul {
+      padding-left: 1.2rem;
+    }
+
+    button {
+      padding: 8px 16px;
+      background: #e67e22;
+      border: none;
+      color: white;
+      border-radius: 4px;
+      margin-top: 1rem;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background: #d35400;
+    }
+  </style>
+</head>
+<body>
+  <h1>Kitchen Dashboard</h1>
+  {% for order in orders %}
+    <div style="margin-bottom: 20px;">
+      <h3>Order #{{ order.id }}</h3>
+      <ul>
+        {% for item in order.items.all %}
+          <li>{{ item.menu_item.name }} × {{ item.quantity }}</li>
+        {% endfor %}
+      </ul>
+      <form method="post">
+        {% csrf_token %}
+        <input type="hidden" name="order_id" value="{{ order.id }}">
+        <button type="submit">Mark as Ready</button>
+      </form>
+    </div>
+  {% empty %}
+    <p>No orders yet.</p>
+  {% endfor %}
+</body>
+</html>
